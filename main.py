@@ -92,7 +92,10 @@ def add_shoe():
 
 @app.route("/")
 def index():
-    return render_template("base.html")
+    sess = db_session.create_session()
+    shoes_data = sess.query(Shoe).all()
+    print(shoes_data)
+    return render_template("shoes_list.html", shoes_data=shoes_data)
 
 
 @app.route("/air")
