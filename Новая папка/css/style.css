@@ -1,0 +1,21 @@
+.flex-fill {
+    flex:1
+ }
+
+.title-image {
+    width: 350px;
+}
+
+.col {
+    text-align: left;
+}
+
+main {
+    padding-top: 3%;
+    padding-inline: 10%;
+}
+
+.title-text {
+    font-weight: bold;
+    margin-bottom: 0;
+}
