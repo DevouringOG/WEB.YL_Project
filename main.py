@@ -90,6 +90,12 @@ def add_shoe():
     return render_template("shoe.html", form=form)
 
 
+@app.route("/show_shoe/<int:shoe_id>")
+def show_shoe(shoe_id):
+    shoe = get(f"http://127.0.0.1:5000/api/shoe/{shoe_id}").json()
+    return render_template("shoe_preview.html", shoe=shoe["shoe"])
+
+
 @app.route("/")
 def index():
     shoes_data = get("http://127.0.0.1:5000/api/shoes").json()["shoes"]

@@ -20,3 +20,11 @@ main {
     font-size: 30px;
     font-weight: bold;
 }
+
+.preview-image {
+    width: 100%;
+}
+
+.col {
+    text-align: left;
+}
