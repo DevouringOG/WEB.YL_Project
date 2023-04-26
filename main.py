@@ -1,11 +1,12 @@
 import datetime
-import io
 import os
+from requests import post, get
 
 from flask import Flask, render_template, redirect
 from flask_login import LoginManager, login_user, logout_user, login_required
+from flask_restful import Api
 
-from data import db_session
+from data import db_session, shoes_api
 from data.shoes import Shoe
 from data.users import User
 from forms.ShoeForm import ShoeForm
@@ -13,6 +14,7 @@ from forms.loginForm import LoginForm
 from forms.registerForm import RegisterForm
 
 app = Flask(__name__)
+api = Api(app)
 app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
 app.permanent_session_lifetime = datetime.timedelta(days=365)
 
@@ -80,21 +82,17 @@ def add_shoe():
                 os.makedirs(path)
             with open(path + "/" + i.filename, "wb") as new_image:
                 new_image.write(i.read())
-        sess = db_session.create_session()
-        shoe = Shoe(name=form.name.data,
-                    category=form.category.data,
-                    price=form.price.data)
-        sess.add(shoe)
-        sess.commit()
+        post("http://127.0.0.1:5000/api/shoes", json={"name": form.name.data,
+                                                      "category": form.category.data,
+                                                      "price": form.price.data})
+        print(form.price.data, 1)
         return redirect("/")
     return render_template("shoe.html", form=form)
 
 
 @app.route("/")
 def index():
-    sess = db_session.create_session()
-    shoes_data = sess.query(Shoe).all()
-    print(shoes_data)
+    shoes_data = get("http://127.0.0.1:5000/api/shoes").json()["shoes"]
     return render_template("shoes_list.html", shoes_data=shoes_data)
 
 
@@ -115,4 +113,9 @@ def dunk():
 
 if __name__ == '__main__':
     db_session.global_init("db/users_data.db")
+    # для списка объектов
+    api.add_resource(shoes_api.ShoeResource, '/api/shoe/<int:shoe_id>')
+
+    # для одного объекта
+    api.add_resource(shoes_api.ShoesListResource, '/api/shoes')
     app.run(debug=True)

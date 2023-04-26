@@ -13,5 +13,10 @@ main {
 .title-text {
     font-weight: bold;
     margin-bottom: 0;
+    font-size: 25px;
+}
+
+.logo {
     font-size: 30px;
+    font-weight: bold;
 }
