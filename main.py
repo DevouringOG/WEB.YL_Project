@@ -1,10 +1,14 @@
 import datetime
+import io
+import os
 
 from flask import Flask, render_template, redirect
 from flask_login import LoginManager, login_user, logout_user, login_required
 
 from data import db_session
+from data.shoes import Shoe
 from data.users import User
+from forms.ShoeForm import ShoeForm
 from forms.loginForm import LoginForm
 from forms.registerForm import RegisterForm
 
@@ -65,6 +69,27 @@ def reqister():
     return render_template('register.html', title='Регистрация', form=form)
 
 
+@app.route("/add_shoe", methods=["POST", "GET"])
+def add_shoe():
+    form = ShoeForm()
+    if form.validate_on_submit():
+        print(form.name.data, form.category.data, form.price.data)
+        for i in form.images.data:
+            path = f"static/img/{form.name.data}"
+            if not os.path.exists(path):
+                os.makedirs(path)
+            with open(path + "/" + i.filename, "wb") as new_image:
+                new_image.write(i.read())
+        sess = db_session.create_session()
+        shoe = Shoe(name=form.name.data,
+                    category=form.category.data,
+                    price=form.price.data)
+        sess.add(shoe)
+        sess.commit()
+        return redirect("/")
+    return render_template("shoe.html", form=form)
+
+
 @app.route("/")
 def index():
     return render_template("base.html")
@@ -87,4 +112,4 @@ def dunk():
 
 if __name__ == '__main__':
     db_session.global_init("db/users_data.db")
-    app.run()
+    app.run(debug=True)
