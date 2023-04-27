@@ -6,6 +6,7 @@ from data.parser import parser
 from data.shoes import Shoe
 
 
+# Функция аборта с проверкой кроссовка
 def abort_if_shoe_not_found(shoe_id):
     session = db_session.create_session()
     news = session.query(Shoe).get(shoe_id)
@@ -14,14 +15,14 @@ def abort_if_shoe_not_found(shoe_id):
 
 
 class ShoeResource(Resource):
-    def get(self, shoe_id):
+    def get(self, shoe_id):  # получения одного кроссовка по id
         abort_if_shoe_not_found(shoe_id)
         session = db_session.create_session()
         shoe = session.query(Shoe).get(shoe_id)
         return jsonify({'shoe': shoe.to_dict(
             only=('id', 'name', 'category', 'price'))})
 
-    def delete(self, shoe_id):
+    def delete(self, shoe_id):  # удаление кроссовка по id
         abort_if_shoe_not_found(shoe_id)
         session = db_session.create_session()
         shoe = session.query(Shoe).get(shoe_id)
@@ -31,13 +32,13 @@ class ShoeResource(Resource):
 
 
 class ShoesListResource(Resource):
-    def get(self):
+    def get(self):  # получения всех кроссовок с бд
         session = db_session.create_session()
         shoes = session.query(Shoe).all()
         return jsonify({'shoes': [item.to_dict(
             only=('id', 'name', 'category', 'price')) for item in shoes]})
 
-    def post(self):
+    def post(self):  # добавление кроссовка в бд
         args = parser.parse_args()
         print(args, 11)
         session = db_session.create_session()
