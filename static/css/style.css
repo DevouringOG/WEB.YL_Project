@@ -28,3 +28,17 @@ main {
 .col {
     text-align: left;
 }
+
+.add-shoe-form {
+    padding-inline: 32%;
+}
+
+.login-form {
+    padding-inline: 32%;
+    padding-bottom: 8%;
+}
+
+.register-form {
+    padding-inline: 32%;
+    padding-bottom: 8%;
+}

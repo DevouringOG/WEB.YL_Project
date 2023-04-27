@@ -4,10 +4,10 @@ from wtforms.validators import DataRequired
 
 
 class ShoeForm(FlaskForm):
-    images = MultipleFileField("Загрузите фото кроссовок в jpg формате с названиями: title.jpg, top.jpg, bottom.jpg, "
-                               "back.jpg", validators=[DataRequired()])
+    images = MultipleFileField("Upload a photo of sneakers in jpg format with the names: title.jpg и top.jpg",
+                               validators=[DataRequired()])
     name = StringField("Name", validators=[DataRequired()])
-    category = SelectField("Category", choices=["Men's Shoes", "Basketball Shoes", "Shoes", "Men's Golf Shoes", ""],
+    category = SelectField("Category", choices=["Men's Shoes", "Basketball Shoes", "Shoes", "Men's Golf Shoes"],
                            validators=[DataRequired()])
     price = FloatField("Price", validators=[DataRequired()])
     submit = SubmitField("Add")
