@@ -12,3 +12,5 @@ class Shoe(SqlAlchemyBase, SerializerMixin): # ORM модель для крос�
     name = sqlalchemy.Column(sqlalchemy.String)
     category = sqlalchemy.Column(sqlalchemy.String)
     price = sqlalchemy.Column(sqlalchemy.Integer)
+    user_id = sqlalchemy.Column(sqlalchemy.Integer)
+    user_phone = sqlalchemy.Column(sqlalchemy.Integer)

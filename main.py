@@ -1,9 +1,9 @@
 import datetime
 import os
-from requests import post, get
+from requests import post, get, delete
 
 from flask import Flask, render_template, redirect
-from flask_login import LoginManager, login_user, logout_user, login_required
+from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 from flask_restful import Api
 
 from data import db_session, shoes_api
@@ -83,15 +83,17 @@ def add_shoe():
     form = ShoeForm()
     if form.validate_on_submit():
         for i in form.images.data:
-            path = f"static/img/{form.name.data}"   # создаёт новую папку для фото если её нету
+            path = f"static/img/{form.name.data}"  # создаёт новую папку для фото если её нету
             if not os.path.exists(path):
                 os.makedirs(path)
             with open(path + "/" + i.filename, "wb") as new_image:
                 new_image.write(i.read())
         post("http://127.0.0.1:5000/api/shoes", json={"name": form.name.data,
                                                       "category": form.category.data,
-                                                      "price": form.price.data})    # используется API \
-                                                                                    # для добавления кроссовка
+                                                      "price": form.price.data,
+                                                      "user_id": current_user.id,
+                                                      "user_phone": form.user_phone.data})  # используется API \
+        # для добавления кроссовка
         return redirect("/")
     return render_template("shoe.html", form=form)
 
@@ -103,10 +105,16 @@ def show_shoe(shoe_id):
     return render_template("shoe_preview.html", shoe=shoe["shoe"])
 
 
+@app.route('/delete_shoe/<int:shoe_id>')
+def delete_shoe(shoe_id):
+    delete(f"http://127.0.0.1:5000/api/shoe/{shoe_id}")
+    return redirect("/")
+
+
 # обработчик для главной страницы
 @app.route("/")
 def index():
-    shoes_data = get("http://127.0.0.1:5000/api/shoes").json()["shoes"]    # запрос к API для получения всех кроссовок
+    shoes_data = get("http://127.0.0.1:5000/api/shoes").json()["shoes"]  # запрос к API для получения всех кроссовок
     return render_template("shoes_list.html", shoes_data=shoes_data)
 
 
@@ -119,4 +127,4 @@ if __name__ == '__main__':
 
     # для одного объекта
     api.add_resource(shoes_api.ShoesListResource, '/api/shoes')
-    app.run(host="0.0.0.0", port=5000)
+    app.run()

@@ -20,7 +20,7 @@ class ShoeResource(Resource):
         session = db_session.create_session()
         shoe = session.query(Shoe).get(shoe_id)
         return jsonify({'shoe': shoe.to_dict(
-            only=('id', 'name', 'category', 'price'))})
+            only=('id', 'name', 'category', 'price', 'user_id', 'user_phone'))})
 
     def delete(self, shoe_id):  # удаление кроссовка по id
         abort_if_shoe_not_found(shoe_id)
@@ -36,7 +36,7 @@ class ShoesListResource(Resource):
         session = db_session.create_session()
         shoes = session.query(Shoe).all()
         return jsonify({'shoes': [item.to_dict(
-            only=('id', 'name', 'category', 'price')) for item in shoes]})
+            only=('id', 'name', 'category', 'price', 'user_id', 'user_phone')) for item in shoes]})
 
     def post(self):  # добавление кроссовка в бд
         args = parser.parse_args()
@@ -45,7 +45,9 @@ class ShoesListResource(Resource):
         shoe = Shoe(
             name=args['name'],
             category=args['category'],
-            price=args['price']
+            price=args['price'],
+            user_id=args["user_id"],
+            user_phone=args["user_phone"]
         )
         print(shoe.price)
         session.add(shoe)

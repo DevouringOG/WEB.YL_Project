@@ -10,4 +10,5 @@ class ShoeForm(FlaskForm):
     category = SelectField("Category", choices=["Men's Shoes", "Basketball Shoes", "Shoes", "Men's Golf Shoes"],
                            validators=[DataRequired()])
     price = FloatField("Price", validators=[DataRequired()])
+    user_phone = FloatField("Phone", validators=[DataRequired()])
     submit = SubmitField("Add")

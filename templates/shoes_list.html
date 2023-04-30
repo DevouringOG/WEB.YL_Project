@@ -9,6 +9,9 @@
       <p class="title-text">{{ shoe["name"] }}</p>
       <p class="category-text">{{ shoe["category"] }}</p>
       <p class="price-text">${{ shoe["price"] }}</p>
+      {% if current_user.id == shoe["user_id"] %}
+        <a class="btn btn-danger" href="delete_shoe/{{ shoe['id'] }}">delete</a>
+      {% endif %}
     </div>
     {% endfor %}
   </div>

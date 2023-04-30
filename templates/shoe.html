@@ -30,6 +30,15 @@
       </div>
       {% endfor %}
     </p>
+    <p>
+      {{ form.user_phone.label }}<br>
+      {{ form.user_phone(class="form-control") }}<br>
+      {% for error in form.user_phone.errors %}
+      <div class="alert alert-danger" role="alert">
+        {{ error }}
+      </div>
+      {% endfor %}
+    </p>
     <p>{{ form.submit(type="submit", class="btn btn-primary") }}</p>
     <div>{{ message }}</div>
   </form>
