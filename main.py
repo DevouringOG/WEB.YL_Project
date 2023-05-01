@@ -12,8 +12,6 @@ from forms.ShoeForm import ShoeForm
 from forms.loginForm import LoginForm
 from forms.registerForm import RegisterForm
 
-from waitress import serve
-
 #   создаём приложение
 app = Flask(__name__)
 api = Api(app)
@@ -129,4 +127,4 @@ if __name__ == '__main__':
 
     # для одного объекта
     api.add_resource(shoes_api.ShoesListResource, '/api/shoes')
-    serve(app, host="0.0.0.0", port=5000)
+    app.run(host="0.0.0.0", port=5000)
